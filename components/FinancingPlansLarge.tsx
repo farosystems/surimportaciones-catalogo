@@ -92,8 +92,9 @@ export default function FinancingPlansLarge({ productoId, precio, showDebug = fa
               <div className="text-xl mb-1">
                 {plan.cuotas} CUOTAS MENSUALES
               </div>
-              <div className="text-2xl">
-                x ${formatearPrecio(calculo.cuota_mensual)}
+              <div className="text-lg space-y-1">
+                <div>x ${formatearPrecio(calculo.cuota_mensual)} EF</div>
+                <div>x ${formatearPrecio(calculo.cuota_mensual_electro)} P.ELEC</div>
               </div>
             </div>
             {anticipo > 0 && (

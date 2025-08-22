@@ -47,13 +47,13 @@ export default function GlobalAppBar() {
                 <span className="font-semibold text-sm">Inicio</span>
               </Link>
               
-              <button 
-                onClick={scrollToProducts}
+              <Link 
+                href="/productos"
                 className="flex items-center px-4 py-2 text-white hover:text-violet-200 rounded-full transition-all duration-300 hover:bg-violet-800/50 group"
               >
                 <Package className="mr-2 size-5 group-hover:scale-110 transition-transform duration-300" />
                 <span className="font-semibold text-sm">Productos</span>
-              </button>
+              </Link>
               
               <Link 
                 href="/#destacados" 

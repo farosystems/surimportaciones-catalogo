@@ -89,7 +89,7 @@ export default function FinancingPlans({ productoId, precio, showDebug = false }
             }`}
           >
             <div className="mb-1">
-              {plan.cuotas} CUOTAS MENSUALES x ${formatearPrecio(calculo.cuota_mensual)}
+              {plan.cuotas} CUOTAS MENSUALES x ${formatearPrecio(calculo.cuota_mensual)} EF / ${formatearPrecio(calculo.cuota_mensual_electro)} P.ELEC
             </div>
             {anticipo > 0 && (
               <div className="text-xs font-normal opacity-90">

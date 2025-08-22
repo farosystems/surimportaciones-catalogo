@@ -56,13 +56,6 @@ export default function ProductCard({ product }: ProductCardProps) {
         {/* Planes de Financiación - Versión simplificada */}
         <FinancingPlans productoId={product.id} precio={productPrice} />
 
-        {/* Precio */}
-        <div className="mt-3 pt-2 border-t border-gray-100">
-          <div className="text-xl font-bold text-blue-600">
-            ${productPrice.toLocaleString()}
-          </div>
-        </div>
-
         {/* Botón Ver Detalles */}
         <Link
           href={`/producto/${product.id}`}

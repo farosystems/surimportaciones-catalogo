@@ -149,16 +149,6 @@ export default function ProductPage({ params }: ProductPageProps) {
                 </h1>
               </div>
 
-              {/* Precio */}
-              <div className="bg-white rounded-2xl p-4 shadow-lg">
-                <div className="flex items-baseline gap-3">
-                  <span className="text-3xl font-bold text-violet-600">
-                    ${formatearPrecio(productPrice)}
-                  </span>
-                  <span className="text-base text-gray-500">ARS</span>
-                </div>
-              </div>
-
               {/* Planes de Financiación */}
               <div className="bg-white rounded-2xl p-4 shadow-lg">
                 <h3 className="text-xl font-bold text-gray-900 mb-4 text-center">Planes de Financiación</h3>

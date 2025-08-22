@@ -9,6 +9,21 @@ export function formatearPrecio(precio: number): string {
   })
 }
 
+// Función para redondear cuotas: a partir de $50 redondea por centenas
+export function redondearCuota(cuota: number): number {
+  if (cuota >= 50) {
+    // Redondear por centenas (a la centena más cercana)
+    return Math.round(cuota / 100) * 100
+  }
+  // Para cuotas menores a $50, mantener redondeo a 2 decimales
+  return Math.round(cuota * 100) / 100
+}
+
+// Función para calcular precio P.ELECTRO (precio + 10%)
+export function calcularPrecioElectro(precio: number): number {
+  return precio * 1.1
+}
+
 // Función para calcular cuotas
 export function calcularCuota(precio: number, plan: PlanFinanciacion) {
   // Verificar si el producto aplica para este plan
@@ -19,16 +34,27 @@ export function calcularCuota(precio: number, plan: PlanFinanciacion) {
   const recargo = (precio * plan.recargo_porcentual / 100) + plan.recargo_fijo
   const precio_final = precio + recargo
   
-  // Calcular cuota mensual
-  const cuota_mensual = precio_final / plan.cuotas
+  // Calcular cuota mensual con redondeo especial
+  const cuota_mensual_raw = precio_final / plan.cuotas
+  const cuota_mensual = redondearCuota(cuota_mensual_raw)
+  
+  // Calcular precio P.ELECTRO
+  const precio_electro = calcularPrecioElectro(precio)
+  const recargo_electro = (precio_electro * plan.recargo_porcentual / 100) + plan.recargo_fijo
+  const precio_final_electro = precio_electro + recargo_electro
+  const cuota_mensual_electro = redondearCuota(precio_final_electro / plan.cuotas)
   
   return {
     precio_original: precio,
     recargo_total: recargo,
     precio_final: precio_final,
-    cuota_mensual: Math.round(cuota_mensual * 100) / 100, // Redondear a 2 decimales
+    cuota_mensual: cuota_mensual,
     cuotas: plan.cuotas,
-    recargo_porcentual: plan.recargo_porcentual
+    recargo_porcentual: plan.recargo_porcentual,
+    // Nuevos campos para P.ELECTRO
+    precio_electro: precio_electro,
+    precio_final_electro: precio_final_electro,
+    cuota_mensual_electro: cuota_mensual_electro
   }
 }
 
