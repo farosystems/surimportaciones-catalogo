@@ -49,24 +49,36 @@ export default function ShoppingListModal({ isOpen, onClose }: ShoppingListModal
   }
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
-      <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[80vh] overflow-hidden">
-        {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-200">
-          <div>
-            <h2 className="text-2xl font-bold text-gray-900">Mi Lista de Compra</h2>
-            <p className="text-gray-600">{itemCount} producto{itemCount !== 1 ? 's' : ''} seleccionado{itemCount !== 1 ? 's' : ''}</p>
+    <div 
+      className="fixed inset-0 z-50 overflow-y-auto"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) {
+          onClose()
+        }
+      }}
+    >
+      {/* Backdrop */}
+      <div className="fixed inset-0 bg-black/50 backdrop-blur-sm"></div>
+      
+      {/* Modal container */}
+      <div className="relative min-h-full flex items-center justify-center p-4">
+        <div className="relative bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] sm:max-h-[80vh] overflow-hidden">
+          {/* Header */}
+          <div className="flex items-center justify-between p-4 sm:p-6 border-b border-gray-200">
+            <div>
+              <h2 className="text-xl sm:text-2xl font-bold text-gray-900">Mi Lista de Compra</h2>
+              <p className="text-sm sm:text-base text-gray-600">{itemCount} producto{itemCount !== 1 ? 's' : ''} seleccionado{itemCount !== 1 ? 's' : ''}</p>
+            </div>
+            <button
+              onClick={onClose}
+              className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+            >
+              <X size={24} className="text-gray-500" />
+            </button>
           </div>
-          <button
-            onClick={onClose}
-            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-          >
-            <X size={24} className="text-gray-500" />
-          </button>
-        </div>
 
-        {/* Content */}
-        <div className="flex-1 overflow-y-auto p-6">
+          {/* Content */}
+          <div className="flex-1 overflow-y-auto p-4 sm:p-6">
           {items.length === 0 ? (
             <div className="text-center py-12">
               <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -84,10 +96,10 @@ export default function ShoppingListModal({ isOpen, onClose }: ShoppingListModal
               {items.map((item) => (
                 <div
                   key={item.id}
-                  className="flex items-center gap-4 p-4 bg-gray-50 rounded-xl"
+                  className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 bg-gray-50 rounded-xl"
                 >
                   {/* Imagen del producto */}
-                  <div className="w-16 h-16 bg-white rounded-lg overflow-hidden flex-shrink-0">
+                  <div className="w-12 h-12 sm:w-16 sm:h-16 bg-white rounded-lg overflow-hidden flex-shrink-0">
                     <img
                       src={item.imagen || item.image || '/placeholder.jpg'}
                       alt={item.descripcion || item.name || 'Producto'}
@@ -97,7 +109,7 @@ export default function ShoppingListModal({ isOpen, onClose }: ShoppingListModal
 
                   {/* Información del producto */}
                   <div className="flex-1 min-w-0">
-                    <h3 className="font-semibold text-gray-900 truncate">
+                    <h3 className="text-sm sm:text-base font-semibold text-gray-900 truncate">
                       {item.descripcion || item.name || 'Producto'}
                     </h3>
                     <div className="flex gap-2 mt-1">
@@ -128,22 +140,23 @@ export default function ShoppingListModal({ isOpen, onClose }: ShoppingListModal
           )}
         </div>
 
-        {/* Footer */}
-        {items.length > 0 && (
-          <div className="p-6 border-t border-gray-200 bg-gray-50">
-            <div className="flex gap-3">
-              <button
-                onClick={handleClearList}
-                className="flex-1 px-4 py-3 bg-gray-200 text-gray-700 font-semibold rounded-xl hover:bg-gray-300 transition-colors"
-              >
-                Limpiar Lista
-              </button>
-                             <div className="flex-1">
-                 <WhatsAppButton product={virtualProduct} />
-               </div>
+          {/* Footer */}
+          {items.length > 0 && (
+            <div className="p-4 sm:p-6 border-t border-gray-200 bg-gray-50">
+              <div className="flex flex-col sm:flex-row gap-3">
+                <button
+                  onClick={handleClearList}
+                  className="flex-1 px-4 py-3 bg-gray-200 text-gray-700 font-semibold rounded-xl hover:bg-gray-300 transition-colors"
+                >
+                  Limpiar Lista
+                </button>
+                <div className="flex-1">
+                  <WhatsAppButton product={virtualProduct} />
+                </div>
+              </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   )

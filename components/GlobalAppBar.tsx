@@ -163,6 +163,18 @@ export default function GlobalAppBar() {
                 Destacados
               </Link>
               
+              {/* Mi Lista móvil */}
+              <button
+                onClick={() => {
+                  setIsShoppingListOpen(true)
+                  setIsMobileMenuOpen(false)
+                }}
+                className="flex items-center px-4 py-3 text-white hover:bg-violet-700/50 rounded-lg transition-colors font-medium"
+              >
+                <ShoppingBag className="mr-3" size={20} />
+                Mi Lista ({itemCount})
+              </button>
+              
               {/* Categorías móvil */}
               <button
                 onClick={() => {
