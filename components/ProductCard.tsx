@@ -45,14 +45,9 @@ export default function ProductCard({ product }: ProductCardProps) {
         </div>
 
         {/* Título del producto */}
-        <h3 className="text-sm sm:text-base font-semibold text-gray-900 mb-2 line-clamp-2">
+        <h3 className="text-sm sm:text-base font-semibold text-gray-900 mb-3">
           {product.descripcion || product.name || 'Sin descripción'}
         </h3>
-
-        {/* Descripción detallada - oculta en móvil */}
-        <p className="text-sm text-gray-600 mb-3 line-clamp-2 hidden sm:block">
-          {product.descripcion_detallada || product.description || 'Sin descripción detallada'}
-        </p>
 
         {/* Planes de Financiación - Versión simplificada */}
         <FinancingPlans productoId={product.id} precio={productPrice} />
