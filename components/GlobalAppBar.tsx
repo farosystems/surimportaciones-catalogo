@@ -92,7 +92,7 @@ export default function GlobalAppBar() {
                   )}
                   <div className="absolute inset-0 bg-violet-400 opacity-0 group-hover:opacity-10 rounded-lg transition-opacity duration-300"></div>
                 </div>
-                <div className="ml-1 sm:ml-2">
+                <div className="ml-1 sm:ml-2 hidden sm:block">
                   <h1 
                     className="text-sm sm:text-base lg:text-lg xl:text-xl font-bold tracking-wide transition-colors duration-300"
                     style={{ color: getTextColor() }}
@@ -110,7 +110,7 @@ export default function GlobalAppBar() {
             </div>
 
             {/* Buscador móvil/tablet en header principal */}
-            <div className="flex-1 max-w-4xl mx-4 lg:hidden">
+            <div className="flex-1 max-w-5xl mx-2 mr-4 lg:hidden">
               <ProductSearch />
             </div>
 
@@ -138,9 +138,8 @@ export default function GlobalAppBar() {
               {/* Botón hamburguesa */}
               <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="hover:opacity-70 transition-colors duration-300 p-2 rounded-full opacity-30"
+                className="hover:opacity-70 transition-colors duration-300 p-2 rounded-full text-white"
                 style={{ 
-                  color: getTextColor(),
                   backgroundColor: configuracion?.primary_color || "#8b5cf6"
                 }}
                 aria-label="Abrir menú"
