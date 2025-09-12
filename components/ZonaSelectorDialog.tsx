@@ -8,7 +8,7 @@ import type { Product } from "@/lib/products"
 interface ZonaSelectorDialogProps {
   isOpen: boolean
   onClose: () => void
-  product: Product
+  product: Product | null
 }
 
 export default function ZonaSelectorDialog({ isOpen, onClose, product }: ZonaSelectorDialogProps) {
@@ -17,7 +17,12 @@ export default function ZonaSelectorDialog({ isOpen, onClose, product }: ZonaSel
   const [isRedirecting, setIsRedirecting] = useState(false)
 
   // Función para generar el mensaje de WhatsApp
-  const generateWhatsAppMessage = (product: Product): string => {
+  const generateWhatsAppMessage = (product: Product | null): string => {
+    // Si no hay producto, usar mensaje general
+    if (!product) {
+      return `Hola! 👋 Me gustaría conocer más sobre los productos que tienen disponibles. ¿Podrían ayudarme?`
+    }
+
     // Verificar si es un producto virtual de lista (tiene descripcion_detallada)
     if (product.descripcion_detallada && product.descripcion?.includes('Lista de')) {
       let message = `Hola! 👋 Me interesa consultar sobre los siguientes productos:\n\n`

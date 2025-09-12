@@ -101,14 +101,12 @@ export default function FinancingPlans({ productoId, precio, showDebug = false }
           >
             <div className="text-center leading-tight">
               {/* Primera línea: cuotas mensuales */}
-              <div className="whitespace-nowrap">
-                {plan.cuotas} cuotas mensuales
+              <div className="whitespace-nowrap text-xs lowercase">
+                {plan.cuotas} cuotas mensuales de
               </div>
               {/* Segunda línea: precios EF / P.ELEC */}
-              <div className="text-xs sm:text-sm">
-                <span className="block sm:inline">${formatearPrecio(calculo.cuota_mensual)} EF</span>
-                <span className="hidden sm:inline"> / </span>
-                <span className="block sm:inline">${formatearPrecio(calculo.cuota_mensual_electro)} P.ELEC</span>
+              <div className="text-[10px] lowercase">
+                ${formatearPrecio(calculo.cuota_mensual)} ef / ${formatearPrecio(calculo.cuota_mensual_electro)} p.elec
               </div>
               {anticipo > 0 && (
                 <div className="whitespace-nowrap text-xs">

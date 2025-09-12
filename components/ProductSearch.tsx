@@ -153,23 +153,6 @@ function ProductSearchContent({ className = '' }: ProductSearchProps) {
       {/* Resultados de búsqueda */}
       {isSearchOpen && (
                  <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-2xl border border-gray-200 max-h-[400px] sm:max-h-[500px] lg:max-h-[600px] overflow-y-auto z-50">
-          {/* Sugerencias de búsqueda */}
-          <div className="p-4 border-b border-gray-100">
-            <h3 className="text-sm font-semibold text-gray-700 mb-2">Sugerencias</h3>
-            <div className="space-y-1">
-              {filteredProducts.slice(0, 3).map((product) => (
-                <button
-                  key={`suggestion-${product.id}`}
-                  onClick={() => setSearchTerm(product.descripcion || '')}
-                  className="flex items-center w-full p-2 text-left text-sm text-gray-600 hover:bg-gray-50 rounded-lg transition-colors"
-                >
-                  <Search className="size-4 mr-3 text-gray-400" />
-                  <span>{highlightText(product.descripcion || '', searchTerm)}</span>
-                </button>
-              ))}
-            </div>
-          </div>
-
           {/* Productos encontrados */}
           <div className="p-4">
             <h3 className="text-sm font-semibold text-gray-700 mb-3">Productos ({filteredProducts.length})</h3>
@@ -272,10 +255,10 @@ function ProductFinancingPrices({ product }: { product: Product }) {
 
   return (
     <div>
-      <div className="text-sm font-bold text-blue-600">
-        ${formatearPrecio(calculo.cuota_mensual)} × {primerPlan.cuotas}
+      <div className="text-xs font-bold text-blue-600">
+        {primerPlan.cuotas} cuotas mensuales de ${formatearPrecio(calculo.cuota_mensual)}
       </div>
-      <div className="text-sm font-bold text-green-600">
+      <div className="text-xs font-bold text-green-600">
         ${formatearPrecio(calculo.cuota_mensual_electro)} P.ELEC
       </div>
     </div>

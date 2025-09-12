@@ -103,7 +103,7 @@ const FinancingPlansLarge = memo(function FinancingPlansLarge({ productoId, prec
             <div className="mb-1 sm:mb-2">
               {/* Primera línea: cuotas mensuales */}
               <div className="text-base sm:text-xl mb-1">
-                {plan.cuotas} cuotas mensuales
+                {plan.cuotas} cuotas mensuales de
               </div>
               {/* Segunda línea: precios EF / P.ELEC */}
               <div className="text-sm sm:text-lg">

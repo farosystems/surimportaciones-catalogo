@@ -5,6 +5,7 @@ import "./globals.css"
 import { ShoppingListProvider } from "@/hooks/use-shopping-list"
 import { ConfiguracionWebProvider } from "@/contexts/ConfiguracionWebContext"
 import GlobalStyles from "@/components/GlobalStyles"
+import WhatsAppFloatingButton from "@/components/WhatsAppFloatingButton"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -53,6 +54,7 @@ export default function RootLayout({
           <GlobalStyles />
           <ShoppingListProvider>
             {children}
+            <WhatsAppFloatingButton />
           </ShoppingListProvider>
         </ConfiguracionWebProvider>
       </body>

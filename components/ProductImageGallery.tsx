@@ -2,23 +2,74 @@
 
 import { useState, useRef } from "react"
 import Image from "next/image"
-import { ChevronLeft, ChevronRight, Star, X } from "lucide-react"
-import { Marca } from "@/lib/products"
+import { ChevronLeft, ChevronRight, Star, X, Heart, Send } from "lucide-react"
+import { Marca, Product } from "@/lib/products"
+import { useShoppingList } from "@/hooks/use-shopping-list"
 
 interface ProductImageGalleryProps {
   images?: string[]
   productName: string
   isFeatured?: boolean
   brand?: Marca
+  product: Product
 }
 
-export default function ProductImageGallery({ images, productName, isFeatured = false, brand }: ProductImageGalleryProps) {
+export default function ProductImageGallery({ images, productName, isFeatured = false, brand, product }: ProductImageGalleryProps) {
+  const { addItem, isInList } = useShoppingList()
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const [isZoomOpen, setIsZoomOpen] = useState(false)
   const [isSliding, setIsSliding] = useState(false)
   const [slideDirection, setSlideDirection] = useState<'left' | 'right' | null>(null)
   const touchStartX = useRef<number | null>(null)
   const touchStartY = useRef<number | null>(null)
+
+  const isInFavorites = isInList(product.id)
+
+  const handleFavoriteClick = (e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    addItem(product)
+  }
+
+  const handleShareClick = async (e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    
+    // Construir la URL del producto
+    const baseUrl = window.location.origin
+    const productCategory = product.categoria?.descripcion || 'Sin categoría'
+    const productUrl = product.categoria && product.categoria.descripcion && 
+      !product.categoria.descripcion.toLowerCase().includes('categor') &&
+      product.categoria.descripcion.trim() !== '' ? 
+      `${baseUrl}/${productCategory.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')}/${product.id}` :
+      `${baseUrl}/varios/${product.id}`
+
+    const shareData = {
+      title: product.descripcion || 'Producto',
+      text: `¡Mira este producto! ${product.descripcion || 'Producto'}`,
+      url: productUrl,
+    }
+
+    try {
+      // Usar Web Share API si está disponible
+      if (navigator.share) {
+        await navigator.share(shareData)
+      } else {
+        // Fallback: copiar al portapapeles
+        await navigator.clipboard.writeText(productUrl)
+        alert('¡Enlace copiado al portapapeles!')
+      }
+    } catch (error) {
+      console.error('Error al compartir:', error)
+      // Fallback final: copiar manualmente
+      try {
+        await navigator.clipboard.writeText(productUrl)
+        alert('¡Enlace copiado al portapapeles!')
+      } catch (clipboardError) {
+        console.error('Error al copiar al portapapeles:', clipboardError)
+      }
+    }
+  }
 
   // Filtrar imágenes que no estén vacías o sean null/undefined y trimear espacios
   const validImages = (images || [])
@@ -54,13 +105,6 @@ export default function ProductImageGallery({ images, productName, isFeatured = 
               </div>
             )}
 
-            {/* Badge Destacado */}
-            {isFeatured && (
-              <div className="absolute top-4 right-4 bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg flex items-center">
-                <Star className="mr-2" size={14} />
-                Destacado
-              </div>
-            )}
           </div>
         </div>
       </div>
@@ -171,14 +215,31 @@ export default function ProductImageGallery({ images, productName, isFeatured = 
             />
           </div>
           
+          {/* Icono de Favoritos - Esquina superior derecha */}
+          <button
+            onClick={handleFavoriteClick}
+            className={`absolute top-2 right-2 p-2 rounded-full shadow-lg transition-all duration-300 hover:scale-110 z-20 ${
+              isInFavorites 
+                ? 'bg-violet-500 text-white' 
+                : 'bg-white/90 text-gray-600 hover:bg-white hover:text-violet-500'
+            }`}
+            title={isInFavorites ? 'Quitar de favoritos' : 'Agregar a favoritos'}
+          >
+            <Heart 
+              className={`w-5 h-5 transition-all duration-300 ${
+                isInFavorites ? 'fill-current' : ''
+              }`} 
+            />
+          </button>
 
-          {/* Badge Destacado */}
-          {isFeatured && (
-            <div className="absolute top-4 right-4 bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg flex items-center">
-              <Star className="mr-2" size={14} />
-              Destacado
-            </div>
-          )}
+          {/* Botón de Compartir - Esquina inferior derecha */}
+          <button
+            onClick={handleShareClick}
+            className="absolute bottom-2 right-2 p-2 bg-white/90 text-gray-600 hover:bg-white hover:text-gray-800 rounded-full shadow-lg transition-all duration-300 hover:scale-110 z-20"
+            title="Compartir producto"
+          >
+            <Send className="w-5 h-5" />
+          </button>
 
           {/* Botones de navegación - solo mostrar si hay más de una imagen */}
           {validImages.length > 1 && (

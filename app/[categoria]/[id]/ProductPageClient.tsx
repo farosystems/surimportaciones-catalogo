@@ -9,7 +9,6 @@ import Footer from "@/components/Footer"
 import ProductImageGallery from "@/components/ProductImageGallery"
 import FinancingPlansLarge from "@/components/FinancingPlansLarge"
 import ProductCard from "@/components/ProductCard"
-import WhatsAppButton from "@/components/WhatsAppButton"
 import AddToListButton from "@/components/AddToListButton"
 import FormattedProductDescription from "@/components/FormattedProductDescription"
 import { useProducts } from "@/hooks/use-products"
@@ -135,27 +134,35 @@ export default function ProductPageClient({ params }: ProductPageClientProps) {
       <GlobalAppBar />
       
       <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-16 py-4" style={{ marginTop: '25px' }}>
-        {/* Breadcrumb */}
-        <div className="mb-6">
-          <button
-            onClick={handleBackToCategory}
-            className="inline-flex items-center text-violet-600 hover:text-violet-700 transition-colors"
-          >
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Volver a {categoria?.descripcion}
-          </button>
-        </div>
-
-
         {/* Producto Principal */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-8">
           {/* Galería de imágenes */}
           <div>
+            {/* Fila con Breadcrumb y Badge Destacado */}
+            <div className="flex justify-between items-center mb-4">
+              <button
+                onClick={handleBackToCategory}
+                className="inline-flex items-center text-violet-600 hover:text-violet-700 transition-colors"
+              >
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                Volver a {categoria?.descripcion}
+              </button>
+              
+              {/* Badge Destacado */}
+              {product.destacado && (
+                <div className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg flex items-center">
+                  <Star className="mr-2" size={14} />
+                  Destacado
+                </div>
+              )}
+            </div>
+            
             <ProductImageGallery 
               images={product.imagenes || [product.imagen] || []}
               productName={product.descripcion || 'Producto'}
               isFeatured={product.destacado || false}
               brand={product.marca}
+              product={product}
             />
             
             {/* Título móvil - debajo de la imagen */}
@@ -227,8 +234,7 @@ export default function ProductPageClient({ params }: ProductPageClientProps) {
             </div>
 
             {/* Botones de acción */}
-            <div className="mb-8 space-y-4">
-              <WhatsAppButton product={product} />
+            <div className="mb-8">
               <AddToListButton product={product} variant="page" />
             </div>
 
@@ -247,17 +253,17 @@ export default function ProductPageClient({ params }: ProductPageClientProps) {
         </div>
 
         {/* Descripción del Producto (sección separada) */}
-        <div className="mb-4">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">Descripción del Producto</h2>
-          <div className="bg-white rounded-lg p-8 shadow-sm max-w-4xl mx-auto">
+        <div className="mb-0 sm:mb-2">
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2 sm:mb-6 text-center">Descripción del Producto</h2>
+          <div className="bg-white rounded-lg p-3 sm:p-8 shadow-sm max-w-4xl mx-auto">
             <FormattedProductDescription description={productDescription} />
           </div>
         </div>
 
         {/* Sección "Por qué elegirnos" */}
-        <div className="mb-4 bg-gray-50 py-16">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+        <div className="mb-4 bg-gray-50 py-2 sm:py-8">
+          <div className="text-center mb-3 sm:mb-12">
+            <h2 className="text-xl sm:text-3xl font-bold text-gray-900 mb-2 sm:mb-4">
               ¿Por qué elegir MUNDOCUOTAS?
             </h2>
           </div>
@@ -268,10 +274,7 @@ export default function ProductPageClient({ params }: ProductPageClientProps) {
               <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Truck className="w-8 h-8 text-blue-600" />
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-2">Envío Gratis</h3>
-              <p className="text-gray-600">
-                Entrega a domicilio sin cargo adicional en tu zona
-              </p>
+              <h3 className="text-xl font-bold text-gray-900">Envío Gratis</h3>
             </div>
 
             {/* Garantía oficial */}
@@ -279,10 +282,7 @@ export default function ProductPageClient({ params }: ProductPageClientProps) {
               <div className="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Shield className="w-8 h-8 text-green-600" />
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-2">Garantía Oficial</h3>
-              <p className="text-gray-600">
-                Todos nuestros productos incluyen garantía de fábrica
-              </p>
+              <h3 className="text-xl font-bold text-gray-900">Garantía Oficial</h3>
             </div>
 
             {/* Financiación flexible */}
@@ -290,10 +290,7 @@ export default function ProductPageClient({ params }: ProductPageClientProps) {
               <div className="bg-violet-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                 <CreditCard className="w-8 h-8 text-violet-600" />
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-2">Financiación Flexible</h3>
-              <p className="text-gray-600">
-                Planes de pago adaptados a tu presupuesto
-              </p>
+              <h3 className="text-xl font-bold text-gray-900">Financiación Flexible</h3>
             </div>
 
             {/* Atención personalizada */}
@@ -301,10 +298,7 @@ export default function ProductPageClient({ params }: ProductPageClientProps) {
               <div className="bg-orange-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Users className="w-8 h-8 text-orange-600" />
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-2">Atención Personalizada</h3>
-              <p className="text-gray-600">
-                Asesoramiento especializado para encontrar lo que necesitas
-              </p>
+              <h3 className="text-xl font-bold text-gray-900">Atención Personalizada</h3>
             </div>
           </div>
         </div>

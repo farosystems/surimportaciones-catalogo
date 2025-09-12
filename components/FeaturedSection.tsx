@@ -41,7 +41,7 @@ export default function FeaturedSection() {
       <section className="py-20 bg-gradient-to-br from-blue-900 via-purple-900 to-blue-800 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h2 className="text-4xl font-bold mb-4 bg-gradient-to-r from-yellow-400 to-yellow-300 bg-clip-text text-transparent">
+            <h2 className="text-2xl sm:text-4xl font-bold mb-4 bg-gradient-to-r from-yellow-400 to-yellow-300 bg-clip-text text-transparent whitespace-nowrap">
               Productos Destacados
             </h2>
             <p className="text-xl text-blue-100">Cargando productos destacados...</p>
@@ -56,7 +56,7 @@ export default function FeaturedSection() {
       <section className="py-20 bg-gradient-to-br from-blue-900 via-purple-900 to-blue-800 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h2 className="text-4xl font-bold mb-4 bg-gradient-to-r from-yellow-400 to-yellow-300 bg-clip-text text-transparent">
+            <h2 className="text-2xl sm:text-4xl font-bold mb-4 bg-gradient-to-r from-yellow-400 to-yellow-300 bg-clip-text text-transparent whitespace-nowrap">
               Productos Destacados
             </h2>
             <p className="text-xl text-red-300">Error al cargar los productos: {error}</p>
@@ -90,7 +90,7 @@ export default function FeaturedSection() {
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold mb-4 bg-gradient-to-r from-yellow-400 to-yellow-300 bg-clip-text text-transparent">
+          <h2 className="text-2xl sm:text-4xl font-bold mb-4 bg-gradient-to-r from-yellow-400 to-yellow-300 bg-clip-text text-transparent whitespace-nowrap">
             Productos Destacados
           </h2>
           <p className="text-xl text-blue-100 max-w-2xl mx-auto">
@@ -125,7 +125,7 @@ export default function FeaturedSection() {
                   {featuredProducts.map((product) => (
                     <div
                       key={product.id}
-                      className="flex-shrink-0 w-64"
+                      className="flex-shrink-0 w-56"
                     >
                       <ProductCard product={product} />
                     </div>
