@@ -672,7 +672,11 @@ export async function getLineasWithCategorias(): Promise<(Linea & { categorias: 
     // 3. Agrupar categorías por línea y filtrar solo las que tienen categorías
     const result = lineas?.map(linea => ({
       ...linea,
-      categorias: categorias?.filter(categoria => categoria.fk_id_linea === linea.id) || []
+      categorias: categorias?.filter(categoria =>
+        categoria.fk_id_linea === linea.id &&
+        categoria.descripcion &&
+        categoria.descripcion.trim() !== ''
+      ) || []
     }))
     .filter(linea => linea.categorias.length > 0) || []
 
@@ -697,7 +701,8 @@ export async function getCategoriasWithoutLinea(): Promise<Categoria[]> {
       return []
     }
 
-    return data || []
+    // Filtrar categorías con descripción vacía o nula
+    return (data || []).filter(categoria => categoria.descripcion && categoria.descripcion.trim() !== '')
   } catch (error) {
     console.error('Error fetching categorias without linea:', error)
     return []
