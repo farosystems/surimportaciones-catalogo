@@ -4,6 +4,7 @@ import { useEffect, useState, useRef } from "react"
 import ComboCard from "./ComboCard"
 import Pagination from "./Pagination"
 import { getCombosVigentes } from "@/lib/supabase-products"
+import { getTituloSeccionCombos } from "@/lib/supabase-config"
 import { Combo } from "@/lib/products"
 
 const COMBOS_PER_PAGE = 3
@@ -13,16 +14,21 @@ export default function CombosSection() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [currentPage, setCurrentPage] = useState(1)
+  const [tituloSeccion, setTituloSeccion] = useState<string>('Combos Especiales')
   const scrollRef = useRef<HTMLDivElement>(null)
 
-  // Cargar combos vigentes
+  // Cargar combos vigentes y título
   useEffect(() => {
-    const loadCombos = async () => {
+    const loadData = async () => {
       try {
         setLoading(true)
         setError(null)
-        const combosData = await getCombosVigentes()
+        const [combosData, titulo] = await Promise.all([
+          getCombosVigentes(),
+          getTituloSeccionCombos()
+        ])
         setCombos(combosData)
+        setTituloSeccion(titulo)
       } catch (err) {
         setError('Error al cargar los combos')
       } finally {
@@ -30,7 +36,7 @@ export default function CombosSection() {
       }
     }
 
-    loadCombos()
+    loadData()
   }, [])
 
   if (loading) {
@@ -39,7 +45,7 @@ export default function CombosSection() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h2 className="text-4xl font-bold mb-4 bg-gradient-to-r from-yellow-400 to-yellow-300 bg-clip-text text-transparent">
-              Combos Especiales
+              {tituloSeccion}
             </h2>
             <p className="text-xl text-violet-100">Cargando combos...</p>
           </div>
@@ -54,7 +60,7 @@ export default function CombosSection() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h2 className="text-4xl font-bold mb-4 bg-gradient-to-r from-yellow-400 to-yellow-300 bg-clip-text text-transparent">
-              Combos Especiales
+              {tituloSeccion}
             </h2>
             <p className="text-xl text-red-300">Error al cargar los combos: {error}</p>
           </div>
@@ -93,7 +99,7 @@ export default function CombosSection() {
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold mb-4 bg-gradient-to-r from-yellow-400 to-yellow-300 bg-clip-text text-transparent">
-            Combos Especiales
+            {tituloSeccion}
           </h2>
           <p className="text-xl text-violet-100 max-w-2xl mx-auto">
             Aprovechá nuestros combos con descuentos especiales y ahorrá en grande

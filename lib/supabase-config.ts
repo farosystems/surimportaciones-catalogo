@@ -61,6 +61,7 @@ export interface ConfiguracionWeb {
 
   // Configuración de secciones
   combos: boolean
+  titulo_seccion_combos: string | null
 }
 
 export interface Zona {
@@ -235,7 +236,8 @@ export async function createDefaultConfiguracionWeb(): Promise<ConfiguracionWeb 
       home_display_category_filter: null,
       home_display_brand_filter: null,
       home_display_featured_only: false,
-      combos: true
+      combos: true,
+      titulo_seccion_combos: 'Combos Especiales'
     }
 
     const { data, error } = await supabase
@@ -273,5 +275,15 @@ export async function getMostrarCombos(): Promise<boolean> {
   } catch (error) {
     console.error('Error al obtener configuración de combos:', error)
     return true // Por defecto mostrar combos
+  }
+}
+
+export async function getTituloSeccionCombos(): Promise<string> {
+  try {
+    const config = await getOrCreateConfiguracionWeb()
+    return config?.titulo_seccion_combos ?? 'Combos Especiales'
+  } catch (error) {
+    console.error('Error al obtener título de sección de combos:', error)
+    return 'Combos Especiales' // Por defecto
   }
 }
