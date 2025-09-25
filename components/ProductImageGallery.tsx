@@ -51,7 +51,7 @@ export default function ProductImageGallery({ images, productName, isFeatured = 
 
     // Detectar si es un combo
     if ((product as any).isCombo || productCategory.toLowerCase() === 'combos') {
-      productUrl = `${baseUrl}/combos/${product.id}?share=v5`
+      productUrl = `${baseUrl}/combos/${product.id}?share=v6`
       title = product.descripcion || 'Combo Especial'
       text = `¡Mira este combo especial! ${product.descripcion || 'Combo'} con descuento increíble`
     } else {
