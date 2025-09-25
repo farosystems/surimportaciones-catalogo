@@ -26,14 +26,16 @@ export async function generateMetadata({ params }: ComboPageProps): Promise<Meta
       }
     }
 
-    // Obtener imagen del combo y usar proxy mejorado
+    // Obtener imagen del combo
     const comboImage = combo.imagen || combo.imagen_2 || combo.imagen_3 || combo.imagen_4 || combo.imagen_5 || '/placeholder.jpg'
 
     let imageUrl: string
     if (comboImage.includes('supabase.co')) {
+      // USAR CLOUDINARY PARA TRANSFORMAR URLs DE SUPABASE
+      // Cloudinary puede fetchear imágenes de URLs externas
       const encodedUrl = encodeURIComponent(comboImage)
-      imageUrl = `https://catalogo-mundocuotas.vercel.app/api/image-proxy?url=${encodedUrl}`
-      console.log('🔄 Usando proxy para Supabase:', imageUrl)
+      imageUrl = `https://res.cloudinary.com/demo/image/fetch/w_1200,h_630,c_fill,f_auto,q_auto/${encodedUrl}`
+      console.log('☁️ Usando Cloudinary para Supabase:', imageUrl)
     } else {
       imageUrl = comboImage
       console.log('✅ Usando URL directa:', imageUrl)
