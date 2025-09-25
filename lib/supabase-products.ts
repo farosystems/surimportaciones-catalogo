@@ -1017,6 +1017,36 @@ export async function getCombos(): Promise<any[]> {
   }
 }
 
+// Obtener combo por ID para metadatos (sin filtrar por activo)
+export async function getComboByIdForMetadata(id: string): Promise<any | null> {
+  try {
+    const { data: combo, error: comboError } = await supabase
+      .from('combos')
+      .select('*')
+      .eq('id', parseInt(id) || 0)
+      .single()
+
+    if (comboError || !combo) {
+      console.error('Error fetching combo for metadata:', comboError)
+      return null
+    }
+
+    return {
+      ...combo,
+      imagenes: [
+        combo.imagen,
+        combo.imagen_2,
+        combo.imagen_3,
+        combo.imagen_4,
+        combo.imagen_5
+      ].filter(img => img && img.trim() !== '')
+    }
+  } catch (error) {
+    console.error('Error fetching combo for metadata:', error)
+    return null
+  }
+}
+
 // Obtener combo por ID con sus productos
 export async function getComboById(id: string): Promise<any | null> {
   try {

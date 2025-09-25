@@ -1,5 +1,5 @@
 import { Metadata } from "next"
-import { getComboById } from "@/lib/supabase-products"
+import { getComboById, getComboByIdForMetadata } from "@/lib/supabase-products"
 import ComboPageClient from "./ComboPageClient"
 
 interface ComboPageProps {
@@ -13,8 +13,8 @@ export async function generateMetadata({ params }: ComboPageProps): Promise<Meta
   const resolvedParams = await params
 
   try {
-    // Obtener el combo
-    const combo = await getComboById(resolvedParams.id)
+    // Obtener el combo (sin filtrar por activo para metadatos)
+    const combo = await getComboByIdForMetadata(resolvedParams.id)
 
     console.log(`🔍 [Combo ${resolvedParams.id}] Datos obtenidos:`, combo)
 
@@ -32,11 +32,18 @@ export async function generateMetadata({ params }: ComboPageProps): Promise<Meta
     console.log(`🖼️ [Combo ${resolvedParams.id}] Imagen seleccionada:`, comboImage)
 
     // Construir la URL completa de la imagen
-    const imageUrl = comboImage.startsWith('http')
-      ? comboImage
-      : comboImage.startsWith('/uploads/')
-        ? `https://catalogo-mundocuotas.vercel.app${comboImage}`
-        : `https://catalogo-mundocuotas.vercel.app${comboImage.startsWith('/') ? comboImage : `/${comboImage}`}`
+    let imageUrl: string
+
+    if (comboImage.startsWith('http://') || comboImage.startsWith('https://')) {
+      // URL absoluta
+      imageUrl = comboImage
+    } else if (comboImage.startsWith('/')) {
+      // URL relativa que empieza con /
+      imageUrl = `https://catalogo-mundocuotas.vercel.app${comboImage}`
+    } else {
+      // URL relativa sin /
+      imageUrl = `https://catalogo-mundocuotas.vercel.app/${comboImage}`
+    }
 
     console.log(`🌐 [Combo ${resolvedParams.id}] URL imagen final:`, imageUrl)
 
