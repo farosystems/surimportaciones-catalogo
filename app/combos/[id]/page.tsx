@@ -16,7 +16,10 @@ export async function generateMetadata({ params }: ComboPageProps): Promise<Meta
     // Obtener el combo
     const combo = await getComboById(resolvedParams.id)
 
+    console.log(`🔍 [Combo ${resolvedParams.id}] Datos obtenidos:`, combo)
+
     if (!combo) {
+      console.log(`❌ [Combo ${resolvedParams.id}] No encontrado`)
       return {
         title: "Combo no encontrado - MUNDOCUOTA",
         description: "El combo que buscas no está disponible.",
@@ -26,12 +29,16 @@ export async function generateMetadata({ params }: ComboPageProps): Promise<Meta
     // Obtener la primera imagen del combo
     const comboImage = combo.imagen || combo.imagen_2 || combo.imagen_3 || combo.imagen_4 || combo.imagen_5 || '/placeholder.jpg'
 
+    console.log(`🖼️ [Combo ${resolvedParams.id}] Imagen seleccionada:`, comboImage)
+
     // Construir la URL completa de la imagen
     const imageUrl = comboImage.startsWith('http')
       ? comboImage
       : comboImage.startsWith('/uploads/')
         ? `https://catalogo-mundocuotas.vercel.app${comboImage}`
         : `https://catalogo-mundocuotas.vercel.app${comboImage.startsWith('/') ? comboImage : `/${comboImage}`}`
+
+    console.log(`🌐 [Combo ${resolvedParams.id}] URL imagen final:`, imageUrl)
 
     const title = `${combo.nombre} - Combo Especial | MUNDOCUOTAS`
     const description = combo.descripcion
