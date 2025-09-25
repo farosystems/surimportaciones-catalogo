@@ -1017,32 +1017,38 @@ export async function getCombos(): Promise<any[]> {
   }
 }
 
-// Obtener combo por ID para metadatos (sin filtrar por activo)
+// Obtener combo por ID para metadatos (replicando exactamente la lógica de getProductById)
 export async function getComboByIdForMetadata(id: string): Promise<any | null> {
   try {
-    const { data: combo, error: comboError } = await supabase
+    const { data, error } = await supabase
       .from('combos')
       .select('*')
       .eq('id', parseInt(id) || 0)
       .single()
 
-    if (comboError || !combo) {
-      console.error('Error fetching combo for metadata:', comboError)
+    if (error) {
+      console.error('Error fetching combo by id for metadata:', error)
       return null
     }
 
-    return {
-      ...combo,
-      imagenes: [
-        combo.imagen,
-        combo.imagen_2,
-        combo.imagen_3,
-        combo.imagen_4,
-        combo.imagen_5
-      ].filter(img => img && img.trim() !== '')
+    // Crear array de imágenes con todos los campos de imagen disponibles (igual que productos)
+    const imagenes = [
+      data.imagen,
+      data.imagen_2,
+      data.imagen_3,
+      data.imagen_4,
+      data.imagen_5
+    ].filter(img => img && img.trim() !== '') // Filtrar imágenes vacías
+
+    // Replicar exactamente la estructura de productos
+    const transformedData = {
+      ...data,
+      imagenes // Agregar el array de imágenes
     }
+
+    return transformedData
   } catch (error) {
-    console.error('Error fetching combo for metadata:', error)
+    console.error('Error fetching combo by id for metadata:', error)
     return null
   }
 }
