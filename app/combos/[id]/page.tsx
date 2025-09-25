@@ -26,13 +26,17 @@ export async function generateMetadata({ params }: ComboPageProps): Promise<Meta
       }
     }
 
-    // Obtener la primera imagen del combo
+    // Obtener imagen del combo
     const comboImage = combo.imagen || combo.imagen_2 || combo.imagen_3 || combo.imagen_4 || combo.imagen_5 || '/placeholder.jpg'
 
-    console.log(`🖼️ [Combo ${resolvedParams.id}] Imagen seleccionada:`, comboImage)
-
-    // Usar la URL directa de Supabase
-    const imageUrl = comboImage
+    // Si es de Supabase, usar proxy. Si no, usar directa (como MercadoLibre)
+    let imageUrl: string
+    if (comboImage.includes('supabase.co')) {
+      const encodedUrl = encodeURIComponent(comboImage)
+      imageUrl = `https://catalogo-mundocuotas.vercel.app/api/image-proxy?url=${encodedUrl}`
+    } else {
+      imageUrl = comboImage
+    }
 
     console.log(`🌐 [Combo ${resolvedParams.id}] URL imagen final:`, imageUrl)
 
@@ -48,7 +52,7 @@ export async function generateMetadata({ params }: ComboPageProps): Promise<Meta
       openGraph: {
         type: 'website',
         locale: 'es_AR',
-        url: `https://catalogo-mundocuotas.vercel.app/combos/${resolvedParams.id}?share=v7`,
+        url: `https://catalogo-mundocuotas.vercel.app/combos/${resolvedParams.id}?share=final`,
         siteName: 'MUNDOCUOTA',
         title,
         description,
