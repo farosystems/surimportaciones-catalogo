@@ -31,10 +31,14 @@ export async function generateMetadata({ params }: ComboPageProps): Promise<Meta
 
     let imageUrl: string
 
-    // Si es imagen de Supabase, usar nuestro proxy para mejorar compatibilidad
+    // Si es imagen de Supabase, intentar forzar acceso público
     if (comboImage && comboImage.includes('supabase.co')) {
-      // Usar el proxy para servir la imagen desde nuestro dominio
-      imageUrl = `https://catalogo-mundocuotas.vercel.app/api/image-proxy?url=${encodeURIComponent(comboImage)}`
+      // Construir URL de Supabase Storage con parámetros para acceso público
+      const url = new URL(comboImage)
+      // Agregar parámetros que pueden ayudar con el acceso público
+      url.searchParams.set('t', Date.now().toString()) // timestamp para evitar caché
+      url.searchParams.set('download', '') // forzar descarga/acceso
+      imageUrl = url.toString()
     } else if (comboImage && (comboImage.startsWith('http://') || comboImage.startsWith('https://'))) {
       // URLs externas (como MercadoLibre) las usamos directamente
       imageUrl = comboImage
