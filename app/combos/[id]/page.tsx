@@ -26,16 +26,17 @@ export async function generateMetadata({ params }: ComboPageProps): Promise<Meta
       }
     }
 
-    // Obtener imagen del combo
+    // Obtener imagen del combo y usar proxy mejorado
     const comboImage = combo.imagen || combo.imagen_2 || combo.imagen_3 || combo.imagen_4 || combo.imagen_5 || '/placeholder.jpg'
 
-    // Si es de Supabase, usar proxy. Si no, usar directa (como MercadoLibre)
     let imageUrl: string
     if (comboImage.includes('supabase.co')) {
       const encodedUrl = encodeURIComponent(comboImage)
       imageUrl = `https://catalogo-mundocuotas.vercel.app/api/image-proxy?url=${encodedUrl}`
+      console.log('🔄 Usando proxy para Supabase:', imageUrl)
     } else {
       imageUrl = comboImage
+      console.log('✅ Usando URL directa:', imageUrl)
     }
 
     console.log(`🌐 [Combo ${resolvedParams.id}] URL imagen final:`, imageUrl)
