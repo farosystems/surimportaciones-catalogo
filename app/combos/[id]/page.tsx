@@ -32,11 +32,11 @@ export async function generateMetadata({ params }: ComboPageProps): Promise<Meta
     let imageUrl: string
 
     if (comboImage && (comboImage.startsWith('http://') || comboImage.startsWith('https://'))) {
-      // URL absoluta - usar proxy para Supabase y PostImages
-      if (comboImage.includes('supabase.co') || comboImage.includes('postimages.org') || comboImage.includes('postimg.cc') || comboImage.includes('i.postimg.cc')) {
+      // URL absoluta - usar proxy SOLO para Supabase
+      if (comboImage.includes('supabase.co')) {
         imageUrl = `https://www.mundocuota.com.ar/api/image-proxy?url=${encodeURIComponent(comboImage)}`
       } else {
-        // URLs externas como mlstatic funcionan directamente
+        // URLs externas como mlstatic y PostImages funcionan directamente
         imageUrl = comboImage
       }
     } else if (comboImage && comboImage.startsWith('/')) {

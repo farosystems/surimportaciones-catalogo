@@ -49,11 +49,11 @@ export async function generateMetadata({ params }: ProductoPageProps): Promise<M
     let imageUrl: string
 
     if (productImage.startsWith('http://') || productImage.startsWith('https://')) {
-      // URL absoluta - usar proxy para Supabase y PostImages
-      if (productImage.includes('supabase.co') || productImage.includes('postimages.org') || productImage.includes('postimg.cc') || productImage.includes('i.postimg.cc')) {
+      // URL absoluta - usar proxy SOLO para Supabase
+      if (productImage.includes('supabase.co')) {
         imageUrl = `https://www.mundocuota.com.ar/api/image-proxy?url=${encodeURIComponent(productImage)}`
       } else {
-        // URLs externas como mlstatic funcionan directamente
+        // URLs externas como mlstatic y PostImages funcionan directamente
         imageUrl = productImage
       }
     } else if (productImage.startsWith('/')) {
