@@ -32,12 +32,13 @@ export async function generateMetadata({ params }: ComboPageProps): Promise<Meta
     let imageUrl: string
 
     if (comboImage && (comboImage.startsWith('http://') || comboImage.startsWith('https://'))) {
-      // URL absoluta - usar proxy SOLO para Supabase
+      // URL absoluta - usar proxy para Supabase (WhatsApp no acepta Supabase directo)
       if (comboImage.includes('supabase.co')) {
-        imageUrl = `https://www.mundocuota.com.ar/api/image-proxy?url=${encodeURIComponent(comboImage)}`
+        // Supabase SIEMPRE con proxy + timestamp
+        const proxiedUrl = `https://www.mundocuota.com.ar/api/image-proxy?url=${encodeURIComponent(comboImage)}`
+        imageUrl = `${proxiedUrl}&t=${Date.now()}`
       } else {
-        // URLs externas como mlstatic y PostImages funcionan directamente
-        // Agregar parámetro v para evitar caché de WhatsApp/Facebook
+        // URLs externas como mlstatic funcionan directamente
         imageUrl = comboImage.includes('?')
           ? `${comboImage}&v=${Date.now()}`
           : `${comboImage}?v=${Date.now()}`
