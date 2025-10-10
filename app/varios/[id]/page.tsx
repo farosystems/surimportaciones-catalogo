@@ -35,14 +35,17 @@ export async function generateMetadata({ params }: ProductoVariosPageProps): Pro
         imageUrl = `https://www.mundocuota.com.ar/api/image-proxy?url=${encodeURIComponent(productImage)}`
       } else {
         // URLs externas como mlstatic y PostImages funcionan directamente
-        imageUrl = productImage
+        // Agregar parámetro v para evitar caché de WhatsApp/Facebook
+        imageUrl = productImage.includes('?')
+          ? `${productImage}&v=${Date.now()}`
+          : `${productImage}?v=${Date.now()}`
       }
     } else if (productImage.startsWith('/')) {
       // URL relativa que empieza con /
-      imageUrl = `https://www.mundocuota.com.ar${productImage}`
+      imageUrl = `https://www.mundocuota.com.ar${productImage}?v=${Date.now()}`
     } else {
       // URL relativa sin /
-      imageUrl = `https://www.mundocuota.com.ar/${productImage}`
+      imageUrl = `https://www.mundocuota.com.ar/${productImage}?v=${Date.now()}`
     }
 
     const title = `${product.descripcion} | MUNDOCUOTAS`

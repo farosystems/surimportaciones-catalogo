@@ -37,17 +37,20 @@ export async function generateMetadata({ params }: ComboPageProps): Promise<Meta
         imageUrl = `https://www.mundocuota.com.ar/api/image-proxy?url=${encodeURIComponent(comboImage)}`
       } else {
         // URLs externas como mlstatic y PostImages funcionan directamente
-        imageUrl = comboImage
+        // Agregar parámetro v para evitar caché de WhatsApp/Facebook
+        imageUrl = comboImage.includes('?')
+          ? `${comboImage}&v=${Date.now()}`
+          : `${comboImage}?v=${Date.now()}`
       }
     } else if (comboImage && comboImage.startsWith('/')) {
       // URL relativa que empieza con /
-      imageUrl = `https://www.mundocuota.com.ar${comboImage}`
+      imageUrl = `https://www.mundocuota.com.ar${comboImage}?v=${Date.now()}`
     } else if (comboImage && comboImage !== '/placeholder.jpg') {
       // URL relativa sin /
-      imageUrl = `https://www.mundocuota.com.ar/${comboImage}`
+      imageUrl = `https://www.mundocuota.com.ar/${comboImage}?v=${Date.now()}`
     } else {
       // Fallback al logo
-      imageUrl = 'https://www.mundocuota.com.ar/LOGO2.png'
+      imageUrl = `https://www.mundocuota.com.ar/LOGO2.png?v=${Date.now()}`
     }
 
     console.log(`🌐 [Combo ${resolvedParams.id}] URL imagen final:`, imageUrl)
