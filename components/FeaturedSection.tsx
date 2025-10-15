@@ -80,7 +80,7 @@ export default function FeaturedSection() {
   return (
     <section
       id="destacados"
-      className="py-20 text-white relative overflow-hidden"
+      className="pt-8 pb-20 text-white relative overflow-hidden"
     >
       {/* Imagen de fondo de la familia */}
       <div 
@@ -100,7 +100,7 @@ export default function FeaturedSection() {
       </div>
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
+        <div className="text-center mb-8">
           <h2 className="text-2xl sm:text-4xl font-bold mb-4 bg-gradient-to-r from-yellow-400 to-yellow-300 bg-clip-text text-transparent whitespace-nowrap">
             {tituloSeccion}
           </h2>
@@ -111,7 +111,7 @@ export default function FeaturedSection() {
         </div>
 
         {/* Contador de productos destacados */}
-        <div className="mb-8 text-center">
+        <div className="mb-8 text-center mt-4">
           <p className="text-blue-100">
             <span className="md:hidden">
               <span className="font-semibold text-yellow-300">{featuredProducts.length}</span> productos destacados

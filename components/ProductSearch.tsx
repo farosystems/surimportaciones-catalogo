@@ -72,12 +72,12 @@ function ProductSearchContent({ className = '' }: ProductSearchProps) {
                description.includes(searchLower) ||
                category.includes(searchLower) ||
                brand.includes(searchLower)
-      }).slice(0, 8) // Limitar a 8 productos
+      }).slice(0, 10) // Limitar a 10 productos
 
       // Buscar combos
       try {
         const combosResults = await searchCombos(searchTerm)
-        const limitedCombos = combosResults.slice(0, 4) // Limitar a 4 combos
+        const limitedCombos = combosResults.slice(0, 10) // Limitar a 10 combos
 
         setFilteredProducts(filteredProductsResults)
         setFilteredCombos(limitedCombos)

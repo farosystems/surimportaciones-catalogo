@@ -42,9 +42,9 @@ export default function ProductCard({ product }: ProductCardProps) {
 
   return (
     <Link href={productUrl} className="block">
-      <div className={`bg-white rounded-2xl shadow-lg overflow-hidden transition-all duration-300 group cursor-pointer ${
-        hasStock 
-          ? 'hover:shadow-xl hover:scale-105 active:scale-95' 
+      <div className={`bg-white rounded-xl shadow-lg overflow-hidden transition-all duration-300 group cursor-pointer ${
+        hasStock
+          ? 'hover:shadow-xl hover:scale-105 active:scale-95'
           : 'opacity-75 grayscale-[0.3]'
       }`}>
         {/* Imagen del producto */}
@@ -54,52 +54,52 @@ export default function ProductCard({ product }: ProductCardProps) {
             alt={product.descripcion || product.name || 'Producto'}
             className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
           />
-          
+
           {/* Icono de Favoritos - Esquina superior izquierda (solo si hay stock) */}
           {hasStock && (
             <button
               onClick={handleFavoriteClick}
-              className={`absolute top-2 left-2 p-2 rounded-full shadow-lg transition-all duration-300 hover:scale-110 z-10 ${
-                isInFavorites 
-                  ? 'bg-violet-500 text-white' 
+              className={`absolute top-1.5 left-1.5 p-1.5 rounded-full shadow-lg transition-all duration-300 hover:scale-110 z-10 ${
+                isInFavorites
+                  ? 'bg-violet-500 text-white'
                   : 'bg-white/90 text-gray-600 hover:bg-white hover:text-violet-500'
               }`}
               title={isInFavorites ? 'Quitar de favoritos' : 'Agregar a favoritos'}
             >
-              <Heart 
-                className={`w-4 h-4 transition-all duration-300 ${
+              <Heart
+                className={`w-3.5 h-3.5 transition-all duration-300 ${
                   isInFavorites ? 'fill-current' : ''
-                }`} 
+                }`}
               />
             </button>
           )}
 
           {/* Badge Sin Stock - Esquina superior derecha */}
           {!hasStock && (
-            <div className="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded-full text-xs sm:text-sm font-semibold shadow-lg">
+            <div className="absolute top-1.5 right-1.5 bg-red-500 text-white px-1.5 py-0.5 rounded-full text-xs font-semibold shadow-lg">
               Sin Stock
             </div>
           )}
-          
+
           {/* Badge Destacado - Esquina superior derecha (solo si hay stock) */}
           {product.destacado && hasStock && (
-            <div className="absolute top-2 right-2 bg-yellow-400 text-black px-2 py-1 rounded-full text-xs sm:text-sm font-semibold shadow-lg">
+            <div className="absolute top-1.5 right-1.5 bg-yellow-400 text-black px-1.5 py-0.5 rounded-full text-xs font-semibold shadow-lg">
               Destacado
             </div>
           )}
         </div>
 
         {/* Información del producto */}
-        <div className="p-2 sm:p-3">
+        <div className="p-2">
           {/* Marca */}
-          <div className="flex gap-1 sm:gap-2 mb-1 flex-wrap">
-            <span className="text-xs text-white bg-gradient-to-r from-blue-500 to-blue-600 px-2 py-1 rounded-full truncate font-semibold shadow-sm">
+          <div className="flex gap-1 mb-1 flex-wrap">
+            <span className="text-xs text-white bg-gradient-to-r from-blue-500 to-blue-600 px-1.5 py-0.5 rounded-full truncate font-semibold shadow-sm">
               {productBrand}
             </span>
           </div>
 
           {/* Título del producto */}
-          <h3 className="text-sm sm:text-base font-semibold text-gray-900 mb-2">
+          <h3 className="text-sm font-semibold text-gray-900 mb-1.5">
             {product.descripcion || product.name || 'Sin descripción'}
           </h3>
 
