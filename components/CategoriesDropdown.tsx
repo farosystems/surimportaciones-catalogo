@@ -153,18 +153,23 @@ export default function CategoriesDropdown({ isOpen, onClose, isMobile: isMobile
     setHoveredLinea(null)
   }
 
-  // Manejar clic en línea para móvil
+  // Manejar clic en línea
   const handleLineaClick = (linea: Linea & { categorias: Categoria[] }) => {
     if (isReallyMobile) {
       if (linea.categorias.length > 0) {
         // Si la línea tiene categorías, navegar a la vista de categorías
         setSelectedLinea(linea)
       } else {
-        // Si no tiene categorías, ir directamente a la página (como un enlace)
+        // Si no tiene categorías, ir directamente a la página de línea
         const slug = generateSlug(linea.descripcion)
-        window.location.href = `/${slug}`
+        window.location.href = `/lineas/${slug}`
         onClose()
       }
+    } else {
+      // En desktop, navegar a la página de línea
+      const slug = generateSlug(linea.descripcion)
+      window.location.href = `/lineas/${slug}`
+      onClose()
     }
   }
 
@@ -325,7 +330,10 @@ export default function CategoriesDropdown({ isOpen, onClose, isMobile: isMobile
                 onMouseLeave={handleLineaMouseLeave}
               >
                 {/* Línea principal */}
-                <div className="flex items-center justify-between px-3 py-2 hover:bg-emerald-50 rounded-lg transition-colors group border border-transparent hover:border-emerald-200 cursor-pointer">
+                <div
+                  onClick={() => handleLineaClick(linea)}
+                  className="flex items-center justify-between px-3 py-2 hover:bg-emerald-50 rounded-lg transition-colors group border border-transparent hover:border-emerald-200 cursor-pointer"
+                >
                   <span className="text-gray-900 group-hover:text-emerald-600 font-semibold text-sm">
                     {linea.descripcion}
                   </span>

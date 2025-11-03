@@ -464,6 +464,78 @@ export async function getProductsByCategory(categoryId: number): Promise<Product
   }
 }
 
+// Obtener productos por línea (todos los productos cuyas categorías pertenecen a una línea)
+export async function getProductsByLinea(lineaId: number): Promise<Product[]> {
+  try {
+    // Primero, obtener todas las categorías de esta línea
+    const { data: categorias, error: categoriasError } = await supabase
+      .from('categorias')
+      .select('id')
+      .eq('fk_id_linea', lineaId)
+
+    if (categoriasError) {
+      console.error('Error fetching categories by linea:', categoriasError)
+      return []
+    }
+
+    if (!categorias || categorias.length === 0) {
+      return []
+    }
+
+    // Obtener IDs de categorías
+    const categoryIds = categorias.map(cat => cat.id)
+
+    // Obtener productos de estas categorías
+    const { data, error } = await supabase
+      .from('productos')
+      .select('*')
+      .in('fk_id_categoria', categoryIds)
+      .gt('precio', 0)
+      .eq('activo', true)
+      .order('destacado', { ascending: false })
+      .order('descripcion', { ascending: true })
+
+    if (error) {
+      console.error('Error fetching products by linea:', error)
+      return []
+    }
+
+    // Obtener categorías y marcas para enriquecer los datos
+    const { categoriesCache, brandsCache, promosCache, promoProductsCache } = await getCachedCategoriesAndBrands()
+
+    // Transformar datos
+    const transformedData = data?.map(product => {
+      const categoria = categoriesCache.get(product.fk_id_categoria) ||
+                       { id: product.fk_id_categoria || 1, descripcion: `Categoría ${product.fk_id_categoria || 1}` }
+
+      const marca = brandsCache.get(product.fk_id_marca) ||
+                   { id: product.fk_id_marca || 1, descripcion: `Marca ${product.fk_id_marca || 1}` }
+
+      // Verificar si el producto tiene una promoción activa
+      const promoId = promoProductsCache.get(parseInt(product.id))
+      const promo = promoId ? promosCache.get(promoId) : undefined
+      const precio_con_descuento = promo
+        ? product.precio * (1 - promo.descuento_porcentaje / 100)
+        : undefined
+
+      return {
+        ...product,
+        fk_id_categoria: product.fk_id_categoria || 1,
+        fk_id_marca: product.fk_id_marca || 1,
+        categoria,
+        marca,
+        promo,
+        precio_con_descuento
+      }
+    }) || []
+
+    return transformedData
+  } catch (error) {
+    console.error('Error fetching products by linea:', error)
+    return []
+  }
+}
+
 export async function getProductsByBrand(brandId: number): Promise<Product[]> {
   try {
     const { data, error } = await supabase
