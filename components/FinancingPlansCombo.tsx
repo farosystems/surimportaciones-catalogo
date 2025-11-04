@@ -112,7 +112,7 @@ export default function FinancingPlansCombo({ comboId, precio, showDebug = false
           <div
             key={plan.id}
             className={`py-2 px-2 sm:px-4 rounded-lg text-center font-bold text-xs sm:text-sm w-full ${
-              colores[index % colores.length]
+              esContado ? 'bg-red-100 text-red-800' : colores[index % colores.length]
             }`}
           >
             <div className="text-center leading-tight">

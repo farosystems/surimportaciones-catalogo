@@ -145,7 +145,7 @@ const FinancingPlansLarge = memo(function FinancingPlansLarge({ productoId, prec
             <div
               key={plan.id}
               className={`p-3 sm:p-4 rounded-lg sm:rounded-xl text-center font-bold text-sm sm:text-lg transition-all duration-300 ${
-                index === 0 ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800'
+                esContado ? 'bg-red-100 text-red-800' : (index === 0 ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800')
               } ${!hasStock ? 'opacity-40 cursor-not-allowed' : ''}`}
             >
               <div className="mb-1 sm:mb-2">

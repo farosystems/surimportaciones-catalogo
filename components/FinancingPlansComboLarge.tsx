@@ -132,7 +132,7 @@ const FinancingPlansComboLarge = memo(function FinancingPlansComboLarge({ comboI
             <div
               key={plan.id}
               className={`p-3 sm:p-4 rounded-lg sm:rounded-xl text-center font-bold text-sm sm:text-lg transition-all duration-300 ${
-                colores[index % colores.length]
+                esContado ? 'bg-red-100 text-red-800' : colores[index % colores.length]
               } ${!hasStock ? 'opacity-40 cursor-not-allowed' : ''}`}
             >
               <div className="mb-1 sm:mb-2">
