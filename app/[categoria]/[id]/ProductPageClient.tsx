@@ -129,14 +129,14 @@ export default function ProductPageClient({ params }: ProductPageClientProps) {
   const precioOferta = hasOferta ? product.precio_oferta! : product.precio
   const descuentoOferta = hasOferta ? product.descuento_porcentual! : 0
 
-  // Verificar si tiene promoción
-  const hasPromo = !!product.promo && !!product.precio_con_descuento
+  // Verificar si tiene promoción con descuento válido
+  const hasPromo = !!product.promo && !!product.precio_con_descuento && product.promo.descuento_porcentaje > 0
 
   // Determinar precio final: priorizar oferta individual sobre promoción
   const finalPrice = hasOferta ? precioOferta : (hasPromo ? product.precio_con_descuento! : (product.precio || 0))
   const hasDiscount = hasOferta || hasPromo
   const discountPercentage = hasOferta ? descuentoOferta : (hasPromo ? product.promo!.descuento_porcentaje : 0)
-  const discountLabel = hasOferta ? 'Contado' : (hasPromo ? product.promo!.nombre : '')
+  const discountLabel = hasOferta ? 'Oferta Especial' : (hasPromo ? product.promo!.nombre : '')
 
   // Debug: Log para verificar las imágenes del producto
   //console.log('🔍 Producto completo:', product)
@@ -211,8 +211,56 @@ export default function ProductPageClient({ params }: ProductPageClientProps) {
 
               {/* Precio móvil - Siempre visible */}
               <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-4 mb-0 shadow-md border border-blue-200">
-                {hasDiscount ? (
-                  // Con oferta o promoción
+                {hasOferta && hasPromo ? (
+                  // Tiene AMBOS: oferta individual Y promoción
+                  <>
+                    {/* Precio de oferta */}
+                    <div className="mb-3 pb-3 border-b border-blue-300">
+                      <div className="flex items-center gap-2 mb-2">
+                        <Tag className="w-4 h-4 text-red-600" />
+                        <span className="text-xs font-bold text-red-600 uppercase">
+                          Oferta Especial
+                        </span>
+                        <span className="ml-auto bg-red-600 text-white px-2 py-1 rounded-full text-xs font-bold shadow-md">
+                          -{descuentoOferta}% OFF
+                        </span>
+                      </div>
+                      <div className="flex items-baseline gap-3">
+                        <span className="text-lg font-bold text-red-600 line-through decoration-2">
+                          ${formatearPrecio(product.precio || 0)}
+                        </span>
+                        <span className="text-4xl font-bold text-green-600">
+                          ${formatearPrecio(precioOferta)}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Precio de promoción */}
+                    <div>
+                      <div className="flex items-center gap-2 mb-2">
+                        <Tag className="w-4 h-4 text-orange-600" />
+                        <span className="text-xs font-bold text-orange-600 uppercase">
+                          {product.promo!.nombre}
+                        </span>
+                        <span className="ml-auto bg-orange-600 text-white px-2 py-1 rounded-full text-xs font-bold shadow-md">
+                          -{product.promo!.descuento_porcentaje}% OFF
+                        </span>
+                      </div>
+                      <div className="flex items-baseline gap-3">
+                        <span className="text-base font-bold text-orange-600 line-through decoration-2">
+                          ${formatearPrecio(product.precio || 0)}
+                        </span>
+                        <span className="text-3xl font-bold text-blue-600">
+                          ${formatearPrecio(product.precio_con_descuento!)}
+                        </span>
+                      </div>
+                      {product.promo!.descripcion && (
+                        <p className="text-xs text-gray-700 mt-2 bg-white/50 rounded p-2">{product.promo!.descripcion}</p>
+                      )}
+                    </div>
+                  </>
+                ) : hasDiscount ? (
+                  // Solo oferta O solo promoción
                   <>
                     <div className="flex items-center gap-2 mb-2">
                       <Tag className="w-4 h-4 text-red-600" />
@@ -236,7 +284,7 @@ export default function ProductPageClient({ params }: ProductPageClientProps) {
                     )}
                   </>
                 ) : (
-                  // Sin promoción
+                  // Sin oferta ni promoción
                   <div className="flex items-center gap-2">
                     <span className="text-sm font-semibold text-blue-700">Precio:</span>
                     <span className="text-4xl font-bold text-blue-600">
@@ -279,8 +327,56 @@ export default function ProductPageClient({ params }: ProductPageClientProps) {
 
             {/* Precio del producto - Siempre visible */}
             <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-5 mb-4 shadow-md border border-blue-200">
-              {hasDiscount ? (
-                // Con oferta o promoción
+              {hasOferta && hasPromo ? (
+                // Tiene AMBOS: oferta individual Y promoción
+                <>
+                  {/* Precio de oferta */}
+                  <div className="mb-4 pb-4 border-b border-blue-300">
+                    <div className="flex items-center gap-2 mb-3">
+                      <Tag className="w-5 h-5 text-red-600" />
+                      <span className="text-sm font-bold text-red-600 uppercase">
+                        Oferta Especial
+                      </span>
+                      <span className="ml-auto bg-red-600 text-white px-3 py-1 rounded-full text-sm font-bold shadow-md">
+                        -{descuentoOferta}% OFF
+                      </span>
+                    </div>
+                    <div className="flex items-baseline gap-4">
+                      <span className="text-2xl font-bold text-red-600 line-through decoration-4">
+                        ${formatearPrecio(product.precio || 0)}
+                      </span>
+                      <span className="text-5xl font-bold text-green-600">
+                        ${formatearPrecio(precioOferta)}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Precio de promoción */}
+                  <div>
+                    <div className="flex items-center gap-2 mb-3">
+                      <Tag className="w-5 h-5 text-orange-600" />
+                      <span className="text-sm font-bold text-orange-600 uppercase">
+                        {product.promo!.nombre}
+                      </span>
+                      <span className="ml-auto bg-orange-600 text-white px-3 py-1 rounded-full text-sm font-bold shadow-md">
+                        -{product.promo!.descuento_porcentaje}% OFF
+                      </span>
+                    </div>
+                    <div className="flex items-baseline gap-4">
+                      <span className="text-xl font-bold text-orange-600 line-through decoration-4">
+                        ${formatearPrecio(product.precio || 0)}
+                      </span>
+                      <span className="text-4xl font-bold text-blue-600">
+                        ${formatearPrecio(product.precio_con_descuento!)}
+                      </span>
+                    </div>
+                    {product.promo!.descripcion && (
+                      <p className="text-sm text-gray-700 mt-3 bg-white/50 rounded p-2">{product.promo!.descripcion}</p>
+                    )}
+                  </div>
+                </>
+              ) : hasDiscount ? (
+                // Solo oferta O solo promoción
                 <>
                   <div className="flex items-center gap-2 mb-3">
                     <Tag className="w-5 h-5 text-red-600" />
@@ -318,7 +414,7 @@ export default function ProductPageClient({ params }: ProductPageClientProps) {
             <div className="mb-4 -mt-2 lg:mt-0">
               <FinancingPlansLarge
                 productoId={product.id.toString()}
-                precio={finalPrice}
+                precio={product.precio}
                 hasStock={product.tiene_stock}
               />
             </div>

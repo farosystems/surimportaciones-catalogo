@@ -34,6 +34,9 @@ async function getCachedCategoriesAndBrands(): Promise<{
     // Si fecha_fin es hoy, la promo es válida todo el día de hoy
     // Si fecha_fin fue ayer o antes, la promo NO es válida
     const promosVigentes = promosResponse.data?.filter(promo => {
+      // Si no tiene fechas configuradas, la promo es válida
+      if (!promo.fecha_inicio || !promo.fecha_fin) return true
+
       const now = new Date()
       const fechaInicio = new Date(promo.fecha_inicio)
       const fechaFin = new Date(promo.fecha_fin)
@@ -76,6 +79,7 @@ export function formatearPrecio(precio: number): string {
 // Función para verificar si una oferta individual del producto está vigente
 export function isOfertaVigente(product: any): boolean {
   if (!product.precio_oferta || product.precio_oferta <= 0) return false
+  if (!product.descuento_porcentual || product.descuento_porcentual <= 0) return false
   if (!product.fecha_vigencia_desde || !product.fecha_vigencia_hasta) return false
 
   const now = new Date()

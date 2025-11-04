@@ -22,8 +22,27 @@ export default function ProductCard({ product }: ProductCardProps) {
   const precioOferta = hasOferta ? product.precio_oferta! : productPrice
   const descuentoOferta = hasOferta ? product.descuento_porcentual! : 0
 
-  // Verificar si tiene promoción
-  const hasPromo = !!product.promo && !!product.precio_con_descuento
+  // Verificar si tiene promoción con descuento válido
+  const hasPromo = !!product.promo && !!product.precio_con_descuento && product.promo.descuento_porcentaje > 0
+
+  // Debug log detallado
+  if (hasOferta || hasPromo) {
+    console.log('🔍 Debug de descuentos:', {
+      id: product.id,
+      descripcion: product.descripcion?.substring(0, 30),
+      hasOferta,
+      hasPromo,
+      'hasOferta && hasPromo': hasOferta && hasPromo,
+      promo_existe: !!product.promo,
+      promo_nombre: product.promo?.nombre,
+      promo_descuento: product.promo?.descuento_porcentaje,
+      precio_con_descuento: product.precio_con_descuento,
+      precio_oferta: product.precio_oferta,
+      descuento_porcentual: product.descuento_porcentual,
+      fecha_vigencia_desde: product.fecha_vigencia_desde,
+      fecha_vigencia_hasta: product.fecha_vigencia_hasta
+    })
+  }
 
   // Determinar precio final: priorizar oferta individual sobre promoción
   const finalPrice = hasOferta ? precioOferta : (hasPromo ? product.precio_con_descuento! : productPrice)
@@ -127,8 +146,43 @@ export default function ProductCard({ product }: ProductCardProps) {
 
           {/* Precio - Siempre visible */}
           <div className="mb-2">
-            {hasDiscount ? (
-              // Con oferta o promoción: precio tachado + precio con descuento
+            {hasOferta && hasPromo && product.promo && product.precio_con_descuento ? (
+              // Tiene AMBOS: oferta individual Y promoción
+              <>
+                {/* Precio de oferta */}
+                <div className="mb-2">
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="text-base font-semibold text-red-600 line-through decoration-2">
+                      ${formatearPrecio(productPrice)}
+                    </span>
+                    <span className="text-xs font-bold text-white bg-red-600 px-2 py-0.5 rounded-full">
+                      -{descuentoOferta}%
+                    </span>
+                  </div>
+                  <div className="text-2xl font-bold text-green-600">
+                    ${formatearPrecio(precioOferta)}
+                  </div>
+                  <div className="text-xs text-gray-600 mt-0.5">Precio Oferta</div>
+                </div>
+
+                {/* Precio de promoción */}
+                <div className="pt-2 border-t border-gray-200">
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="text-sm font-semibold text-orange-600 line-through decoration-2">
+                      ${formatearPrecio(productPrice)}
+                    </span>
+                    <span className="text-xs font-bold text-white bg-orange-600 px-2 py-0.5 rounded-full">
+                      -{product.promo.descuento_porcentaje}%
+                    </span>
+                  </div>
+                  <div className="text-xl font-bold text-blue-600">
+                    ${formatearPrecio(product.precio_con_descuento)}
+                  </div>
+                  <div className="text-xs text-gray-600 mt-0.5">{product.promo.nombre}</div>
+                </div>
+              </>
+            ) : hasDiscount ? (
+              // Solo oferta O solo promoción
               <>
                 <div className="flex items-center gap-2 mb-1">
                   <span className="text-base font-semibold text-red-600 line-through decoration-2">
@@ -151,7 +205,7 @@ export default function ProductCard({ product }: ProductCardProps) {
           </div>
 
           {/* Planes de Financiación - Versión simplificada */}
-          <FinancingPlans productoId={product.id} precio={finalPrice} />
+          <FinancingPlans productoId={product.id} precio={productPrice} />
         </div>
       </div>
     </Link>
