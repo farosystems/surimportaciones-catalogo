@@ -1,18 +1,15 @@
 "use client"
 
-import { useState, useEffect, useMemo } from "react"
+import { useState, useEffect, useMemo, useRef } from "react"
 import { use } from "react"
 import { Search, Package } from "lucide-react"
 import GlobalAppBar from "@/components/GlobalAppBar"
 import Footer from "@/components/Footer"
 import ProductCard from "@/components/ProductCard"
 import ComboCard from "@/components/ComboCard"
-import Pagination from "@/components/Pagination"
 import { useProducts } from "@/hooks/use-products"
 import { getCombosByCategory } from "@/lib/supabase-products"
 import { Categoria } from "@/lib/products"
-
-const PRODUCTS_PER_PAGE = 6
 
 interface CategoriaPageProps {
   params: Promise<{
@@ -23,10 +20,11 @@ interface CategoriaPageProps {
 export default function CategoriaPage({ params }: CategoriaPageProps) {
   const resolvedParams = use(params)
   const [searchTerm, setSearchTerm] = useState("")
-  const [currentPage, setCurrentPage] = useState(1)
   const [animateProducts, setAnimateProducts] = useState(false)
   const [combos, setCombos] = useState<any[]>([])
   const [combosLoading, setCombosLoading] = useState(true)
+  const [visibleItems, setVisibleItems] = useState<Set<number>>(new Set())
+  const observerRef = useRef<IntersectionObserver | null>(null)
 
   const {
     products,
@@ -106,33 +104,58 @@ export default function CategoriaPage({ params }: CategoriaPageProps) {
     return items
   }, [combos, filteredProducts])
 
-  // Calcular paginación para todos los items
-  const totalPages = Math.ceil(allItems.length / PRODUCTS_PER_PAGE)
-  const startIndex = (currentPage - 1) * PRODUCTS_PER_PAGE
-  const paginatedItems = allItems.slice(startIndex, startIndex + PRODUCTS_PER_PAGE)
-
-  // Resetear página cuando cambien los filtros
+  // Resetear animación cuando cambien los filtros
   useEffect(() => {
-    setCurrentPage(1)
     setAnimateProducts(true)
+    setVisibleItems(new Set())
     const timer = setTimeout(() => setAnimateProducts(false), 100)
     return () => clearTimeout(timer)
-  }, [searchTerm])
+  }, [searchTerm, allItems])
+
+  // Intersection Observer para animaciones al hacer scroll
+  useEffect(() => {
+    observerRef.current = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const index = parseInt(entry.target.getAttribute('data-index') || '0')
+            setVisibleItems((prev) => new Set(prev).add(index))
+          }
+        })
+      },
+      {
+        threshold: 0.1,
+        rootMargin: '50px'
+      }
+    )
+
+    return () => {
+      if (observerRef.current) {
+        observerRef.current.disconnect()
+      }
+    }
+  }, [])
+
+  // Observar elementos cuando cambien los items
+  useEffect(() => {
+    const elements = document.querySelectorAll('[data-index]')
+    elements.forEach((el) => {
+      if (observerRef.current) {
+        observerRef.current.observe(el)
+      }
+    })
+
+    return () => {
+      elements.forEach((el) => {
+        if (observerRef.current) {
+          observerRef.current.unobserve(el)
+        }
+      })
+    }
+  }, [allItems])
 
   const handleClearFilters = () => {
     setSearchTerm("")
-    setCurrentPage(1)
-  }
-
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page)
-    setAnimateProducts(true)
-    const timer = setTimeout(() => setAnimateProducts(false), 100)
-
-    // Scroll suave al inicio de los productos
-    document.getElementById("productos-grid")?.scrollIntoView({ behavior: "smooth" })
-
-    return () => clearTimeout(timer)
   }
 
   if (loading || combosLoading) {
@@ -202,16 +225,6 @@ export default function CategoriaPage({ params }: CategoriaPageProps) {
               {filteredProducts.length} productos{combos.length > 0 ? ` y ${combos.length} combos` : ''} en {categoria.descripcion}
             </p>
           </div>
-
-          {/* Información de paginación */}
-          <div className="flex items-center justify-between text-sm text-gray-600 mt-4">
-            <span>
-              Mostrando {startIndex + 1}-{Math.min(startIndex + PRODUCTS_PER_PAGE, allItems.length)} de {allItems.length} elementos
-            </span>
-            <span>
-              Página {currentPage} de {totalPages}
-            </span>
-          </div>
         </div>
 
         {/* Grid de Productos y Combos */}
@@ -220,11 +233,15 @@ export default function CategoriaPage({ params }: CategoriaPageProps) {
             <div className={`grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8 transition-all duration-300 ${
               animateProducts ? 'opacity-50' : 'opacity-100'
             }`}>
-              {paginatedItems.map((item, index) => (
+              {allItems.map((item, index) => (
                 <div
                   key={`${item.type}-${item.id}`}
-                  className="animate-fade-in-up"
-                  style={{ animationDelay: `${index * 0.1}s` }}
+                  data-index={index}
+                  className={`transition-all duration-700 ${
+                    visibleItems.has(index)
+                      ? 'opacity-100 translate-y-0'
+                      : 'opacity-0 translate-y-8'
+                  }`}
                 >
                   {item.type === 'combo' ? (
                     <ComboCard combo={item} />
@@ -247,14 +264,6 @@ export default function CategoriaPage({ params }: CategoriaPageProps) {
           )}
         </div>
 
-        {/* Paginación */}
-        {totalPages > 1 && (
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={handlePageChange}
-          />
-        )}
       </div>
       <Footer />
     </div>

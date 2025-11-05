@@ -1,16 +1,13 @@
 "use client"
 
-import { useState, useEffect, useMemo } from "react"
+import { useState, useEffect, useMemo, useRef } from "react"
 import { use } from "react"
 import { Package } from "lucide-react"
 import GlobalAppBar from "@/components/GlobalAppBar"
 import Footer from "@/components/Footer"
 import ProductCard from "@/components/ProductCard"
-import Pagination from "@/components/Pagination"
 import { getProductsByLinea, getLineas } from "@/lib/supabase-products"
 import { Product, Linea } from "@/lib/products"
-
-const PRODUCTS_PER_PAGE = 6
 
 interface LineaPageProps {
   params: Promise<{
@@ -24,8 +21,9 @@ export default function LineaPage({ params }: LineaPageProps) {
   const [lineas, setLineas] = useState<Linea[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [currentPage, setCurrentPage] = useState(1)
   const [animateProducts, setAnimateProducts] = useState(false)
+  const [visibleItems, setVisibleItems] = useState<Set<number>>(new Set())
+  const observerRef = useRef<IntersectionObserver | null>(null)
 
   // Cargar líneas
   useEffect(() => {
@@ -76,29 +74,55 @@ export default function LineaPage({ params }: LineaPageProps) {
     }
   }, [linea])
 
-  // Calcular paginación
-  const totalPages = Math.ceil(products.length / PRODUCTS_PER_PAGE)
-  const startIndex = (currentPage - 1) * PRODUCTS_PER_PAGE
-  const paginatedProducts = products.slice(startIndex, startIndex + PRODUCTS_PER_PAGE)
-
-  // Resetear página cuando cambien los productos
+  // Resetear animación cuando cambien los productos
   useEffect(() => {
-    setCurrentPage(1)
     setAnimateProducts(true)
+    setVisibleItems(new Set())
     const timer = setTimeout(() => setAnimateProducts(false), 100)
     return () => clearTimeout(timer)
   }, [products])
 
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page)
-    setAnimateProducts(true)
-    const timer = setTimeout(() => setAnimateProducts(false), 100)
+  // Intersection Observer para animaciones al hacer scroll
+  useEffect(() => {
+    observerRef.current = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const index = parseInt(entry.target.getAttribute('data-index') || '0')
+            setVisibleItems((prev) => new Set(prev).add(index))
+          }
+        })
+      },
+      {
+        threshold: 0.1,
+        rootMargin: '50px'
+      }
+    )
 
-    // Scroll suave al inicio de los productos
-    document.getElementById("productos-grid")?.scrollIntoView({ behavior: "smooth" })
+    return () => {
+      if (observerRef.current) {
+        observerRef.current.disconnect()
+      }
+    }
+  }, [])
 
-    return () => clearTimeout(timer)
-  }
+  // Observar elementos cuando cambien los productos
+  useEffect(() => {
+    const elements = document.querySelectorAll('[data-index]')
+    elements.forEach((el) => {
+      if (observerRef.current) {
+        observerRef.current.observe(el)
+      }
+    })
+
+    return () => {
+      elements.forEach((el) => {
+        if (observerRef.current) {
+          observerRef.current.unobserve(el)
+        }
+      })
+    }
+  }, [products])
 
   if (loading) {
     return (
@@ -166,18 +190,6 @@ export default function LineaPage({ params }: LineaPageProps) {
               {products.length} productos en {linea.descripcion}
             </p>
           </div>
-
-          {/* Información de paginación */}
-          {totalPages > 0 && (
-            <div className="flex items-center justify-between text-sm text-gray-600 mt-4">
-              <span>
-                Mostrando {startIndex + 1}-{Math.min(startIndex + PRODUCTS_PER_PAGE, products.length)} de {products.length} productos
-              </span>
-              <span>
-                Página {currentPage} de {totalPages}
-              </span>
-            </div>
-          )}
         </div>
 
         {/* Grid de Productos */}
@@ -186,11 +198,15 @@ export default function LineaPage({ params }: LineaPageProps) {
             <div className={`grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8 transition-all duration-300 ${
               animateProducts ? 'opacity-50' : 'opacity-100'
             }`}>
-              {paginatedProducts.map((product, index) => (
+              {products.map((product, index) => (
                 <div
                   key={product.id}
-                  className="animate-fade-in-up"
-                  style={{ animationDelay: `${index * 0.1}s` }}
+                  data-index={index}
+                  className={`transition-all duration-700 ${
+                    visibleItems.has(index)
+                      ? 'opacity-100 translate-y-0'
+                      : 'opacity-0 translate-y-8'
+                  }`}
                 >
                   <ProductCard product={product} />
                 </div>
@@ -208,15 +224,6 @@ export default function LineaPage({ params }: LineaPageProps) {
             </div>
           )}
         </div>
-
-        {/* Paginación */}
-        {totalPages > 1 && (
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={handlePageChange}
-          />
-        )}
       </div>
       <Footer />
     </div>
