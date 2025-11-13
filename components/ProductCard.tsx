@@ -75,9 +75,9 @@ export default function ProductCard({ product }: ProductCardProps) {
 
   return (
     <Link href={productUrl} className="block">
-      <div className={`bg-white rounded-xl shadow-lg overflow-hidden transition-all duration-300 group cursor-pointer ${
+      <div className={`bg-white rounded-xl shadow-lg overflow-hidden transition-all duration-300 group cursor-pointer relative ${
         hasStock
-          ? 'hover:shadow-xl hover:scale-105 active:scale-95'
+          ? 'hover:shadow-xl hover:scale-[1.03] hover:z-50 active:scale-95'
           : 'opacity-75 grayscale-[0.3]'
       }`}>
         {/* Imagen del producto */}

@@ -71,7 +71,7 @@ export default function FeaturedSection() {
   return (
     <section
       id="destacados"
-      className="pt-8 pb-20 text-white relative overflow-hidden"
+      className="pt-8 pb-20 text-white relative"
     >
       {/* Imagen de fondo de la familia */}
       <div
@@ -113,7 +113,7 @@ export default function FeaturedSection() {
             <p className="text-xl text-emerald-100">No hay productos destacados disponibles</p>
           </div>
         ) : (
-          <div className="px-12">
+          <div className="py-4">
             <Carousel
               opts={{
                 align: "start",
@@ -125,14 +125,14 @@ export default function FeaturedSection() {
                 {featuredProducts.map((product) => (
                   <CarouselItem
                     key={product.id}
-                    className="pl-4 basis-full sm:basis-1/2 lg:basis-1/3"
+                    className="pl-4 py-3 basis-full sm:basis-1/2 lg:basis-1/3"
                   >
                     <ProductCard product={product} />
                   </CarouselItem>
                 ))}
               </CarouselContent>
-              <CarouselPrevious className="left-0" />
-              <CarouselNext className="right-0" />
+              <CarouselPrevious className="-left-12 lg:-left-16 h-12 w-12 bg-white/90 hover:bg-white" />
+              <CarouselNext className="-right-12 lg:-right-16 h-12 w-12 bg-white/90 hover:bg-white" />
             </Carousel>
           </div>
         )}

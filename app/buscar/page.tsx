@@ -247,7 +247,7 @@ function BuscarPageContent() {
         {searchTerm && (
           <div id="productos-grid" className="mb-12">
             {allItems.length > 0 ? (
-              <div className={`grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8 transition-all duration-300 ${
+              <div className={`grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8 p-4 transition-all duration-300 ${
                 animateProducts ? 'opacity-50' : 'opacity-100'
               }`}>
                 {allItems.map((item, index) => (

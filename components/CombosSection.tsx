@@ -135,7 +135,7 @@ export default function CombosSection() {
 
         {/* Grid para desktop */}
         <div className="hidden md:block">
-          <div className={`grid gap-8 ${
+          <div className={`grid gap-8 p-4 ${
             displayCombos.length === 1
               ? "grid-cols-1 justify-items-center"
               : "grid-cols-2 lg:grid-cols-3"

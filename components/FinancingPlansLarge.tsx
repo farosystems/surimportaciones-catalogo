@@ -162,10 +162,10 @@ const FinancingPlansLarge = memo(function FinancingPlansLarge({ productoId, prec
                 {esContado ? (
                   <>
                     {/* Plan de contado (1 cuota) */}
-                    <div className="text-lg sm:text-2xl mb-1">
+                    <div className="text-xl sm:text-3xl mb-1">
                       Contado {descuentoContado}% OFF!
                     </div>
-                    <div className="text-xl sm:text-3xl">
+                    <div className="text-2xl sm:text-4xl">
                       ${formatearPrecio(precioContado)}
                     </div>
                   </>

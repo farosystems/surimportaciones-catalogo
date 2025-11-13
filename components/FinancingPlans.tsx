@@ -149,10 +149,10 @@ export default function FinancingPlans({ productoId, precio, showDebug = false }
               {esContado ? (
                 <>
                   {/* Plan de contado (1 cuota) */}
-                  <div className="whitespace-nowrap text-base">
+                  <div className="whitespace-nowrap text-lg">
                     Contado {descuentoContado}% OFF!
                   </div>
-                  <div className="text-sm">
+                  <div className="text-base">
                     ${formatearPrecio(precioContado)}
                   </div>
                 </>

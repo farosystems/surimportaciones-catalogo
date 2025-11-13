@@ -47,9 +47,9 @@ export default function ComboCard({ combo }: ComboCardProps) {
 
   return (
     <Link href={comboUrl} className="block">
-      <div className={`bg-white rounded-2xl shadow-lg overflow-hidden transition-all duration-300 group cursor-pointer ${
+      <div className={`bg-white rounded-2xl shadow-lg overflow-hidden transition-all duration-300 group cursor-pointer relative ${
         isValid
-          ? 'hover:shadow-xl hover:scale-105 active:scale-95'
+          ? 'hover:shadow-xl hover:scale-[1.03] hover:z-50 active:scale-95'
           : 'opacity-75 grayscale-[0.3]'
       }`}>
         {/* Imagen del combo */}

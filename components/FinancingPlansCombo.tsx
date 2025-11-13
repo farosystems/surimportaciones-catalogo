@@ -119,10 +119,10 @@ export default function FinancingPlansCombo({ comboId, precio, showDebug = false
               {esContado ? (
                 <>
                   {/* Plan de contado (1 cuota) */}
-                  <div className="whitespace-nowrap text-base">
+                  <div className="whitespace-nowrap text-lg">
                     Contado 20% OFF!
                   </div>
-                  <div className="text-sm">
+                  <div className="text-base">
                     ${formatearPrecio(precioContado)}
                   </div>
                 </>

@@ -74,7 +74,7 @@ export default function Promo12CuotasSection() {
   return (
     <section
       id="promo-productos"
-      className="pt-8 pb-20 bg-gradient-to-br from-emerald-900 via-emerald-900 to-emerald-800 text-white relative overflow-hidden"
+      className="pt-8 pb-20 bg-gradient-to-br from-emerald-900 via-emerald-900 to-emerald-800 text-white relative"
     >
       {/* Fondo animado */}
       <div className="absolute inset-0 opacity-10">
@@ -110,7 +110,7 @@ export default function Promo12CuotasSection() {
             <p className="text-xl text-emerald-100">No hay productos disponibles {planInfo ? (planInfo.cuotas === 1 ? 'en oferta de contado' : `en ${planInfo.cuotas} cuotas`) : 'promocionales'}</p>
           </div>
         ) : (
-          <div className="px-12">
+          <div className="py-4">
             <Carousel
               opts={{
                 align: "start",
@@ -122,14 +122,14 @@ export default function Promo12CuotasSection() {
                 {promoProducts.map((product) => (
                   <CarouselItem
                     key={product.id}
-                    className="pl-4 basis-full sm:basis-1/2 lg:basis-1/3"
+                    className="pl-4 py-3 basis-full sm:basis-1/2 lg:basis-1/3"
                   >
                     <ProductCard product={product} />
                   </CarouselItem>
                 ))}
               </CarouselContent>
-              <CarouselPrevious className="left-0" />
-              <CarouselNext className="right-0" />
+              <CarouselPrevious className="-left-12 lg:-left-16 h-12 w-12 bg-white/90 hover:bg-white" />
+              <CarouselNext className="-right-12 lg:-right-16 h-12 w-12 bg-white/90 hover:bg-white" />
             </Carousel>
           </div>
         )}

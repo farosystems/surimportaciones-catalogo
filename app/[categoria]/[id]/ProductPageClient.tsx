@@ -477,7 +477,7 @@ export default function ProductPageClient({ params }: ProductPageClientProps) {
 
             {/* Grid para desktop */}
             <div className="hidden md:block">
-              <div className="grid grid-cols-3 gap-8">
+              <div className="grid grid-cols-3 gap-8 p-4">
                 {relatedProducts.slice(0, 3).map((relatedProduct) => (
                   <div key={relatedProduct.id} className="animate-fade-in-up">
                     <ProductCard product={relatedProduct} />

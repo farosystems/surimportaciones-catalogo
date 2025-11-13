@@ -78,7 +78,7 @@ export default function ComboProductsSection({ productos }: ComboProductsSection
 
       {/* Grid para desktop */}
       <div className="hidden md:block">
-        <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 p-4">
           {productos.map((comboProducto, index) => (
             <div
               key={`desktop-${comboProducto.producto_id}-${index}`}

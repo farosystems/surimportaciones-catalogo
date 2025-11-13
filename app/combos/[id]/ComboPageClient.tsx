@@ -340,7 +340,7 @@ export default function ComboPageClient({ params: paramsPromise }: ComboPageClie
 
             {/* Grid para desktop */}
             <div className="hidden md:block">
-              <div className="grid grid-cols-3 gap-8">
+              <div className="grid grid-cols-3 gap-8 p-4">
                 {relatedCombos.slice(0, 3).map((relatedCombo) => (
                   <div key={relatedCombo.id} className="animate-fade-in-up">
                     {/* Usar ComboCard aquí cuando esté disponible */}
