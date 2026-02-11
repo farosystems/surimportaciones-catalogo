@@ -35,7 +35,7 @@ export async function generateMetadata({ params }: ComboPageProps): Promise<Meta
       // URL absoluta - usar proxy para Supabase (WhatsApp no acepta Supabase directo)
       if (comboImage.includes('supabase.co')) {
         // Supabase SIEMPRE con proxy + timestamp
-        const proxiedUrl = `https://www.mundocuota.com.ar/api/image-proxy?url=${encodeURIComponent(comboImage)}`
+        const proxiedUrl = `https://surimportacion-catalogo.vercel.app/api/image-proxy?url=${encodeURIComponent(comboImage)}`
         imageUrl = `${proxiedUrl}&t=${Date.now()}`
       } else {
         // URLs externas como mlstatic funcionan directamente
@@ -45,13 +45,13 @@ export async function generateMetadata({ params }: ComboPageProps): Promise<Meta
       }
     } else if (comboImage && comboImage.startsWith('/')) {
       // URL relativa que empieza con /
-      imageUrl = `https://www.mundocuota.com.ar${comboImage}?v=${Date.now()}`
+      imageUrl = `https://surimportacion-catalogo.vercel.app${comboImage}?v=${Date.now()}`
     } else if (comboImage && comboImage !== '/placeholder.jpg') {
       // URL relativa sin /
-      imageUrl = `https://www.mundocuota.com.ar/${comboImage}?v=${Date.now()}`
+      imageUrl = `https://surimportacion-catalogo.vercel.app/${comboImage}?v=${Date.now()}`
     } else {
       // Fallback al logo
-      imageUrl = `https://www.mundocuota.com.ar/LOGO2.png?v=${Date.now()}`
+      imageUrl = `https://surimportacion-catalogo.vercel.app/LOGO2.png`
     }
 
     console.log(`🌐 [Combo ${resolvedParams.id}] URL imagen final:`, imageUrl)
@@ -68,7 +68,7 @@ export async function generateMetadata({ params }: ComboPageProps): Promise<Meta
       openGraph: {
         type: 'website',
         locale: 'es_AR',
-        url: `https://www.mundocuota.com.ar/combos/${resolvedParams.id}?share=final`,
+        url: `https://surimportacion-catalogo.vercel.app/combos/${resolvedParams.id}`,
         siteName: 'SUR IMPORTACIÓN',
         title,
         description,

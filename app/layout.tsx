@@ -20,13 +20,13 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'es_AR',
-    url: 'https://www.mundocuota.com.ar',
+    url: 'https://surimportacion-catalogo.vercel.app',
     siteName: 'SUR IMPORTACIÓN',
     title: 'SUR IMPORTACIÓN - Electrodomésticos en Cuotas',
     description: 'Tu tienda de electrodomésticos de confianza con los mejores planes de financiación. Heladeras, lavarropas, aires acondicionados y más.',
     images: [
       {
-        url: 'https://www.mundocuota.com.ar/LOGO2.png?v=5',
+        url: 'https://surimportacion-catalogo.vercel.app/LOGO2.png',
         width: 400,
         height: 200,
         alt: 'SUR IMPORTACIÓN - Electrodomésticos en Cuotas',
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'SUR IMPORTACIÓN - Electrodomésticos en Cuotas',
     description: 'Tu tienda de electrodomésticos de confianza con los mejores planes de financiación. Heladeras, lavarropas, aires acondicionados y más.',
-    images: ['https://www.mundocuota.com.ar/LOGO2.png?v=5'],
+    images: ['https://surimportacion-catalogo.vercel.app/LOGO2.png'],
   },
 }
 

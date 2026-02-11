@@ -33,7 +33,7 @@ export async function generateMetadata({ params }: ProductoVariosPageProps): Pro
       // URL absoluta - usar proxy para Supabase (WhatsApp no acepta Supabase directo)
       if (productImage.includes('supabase.co')) {
         // Supabase SIEMPRE con proxy + timestamp
-        const proxiedUrl = `https://www.mundocuota.com.ar/api/image-proxy?url=${encodeURIComponent(productImage)}`
+        const proxiedUrl = `https://surimportacion-catalogo.vercel.app/api/image-proxy?url=${encodeURIComponent(productImage)}`
         imageUrl = `${proxiedUrl}&t=${Date.now()}`
       } else {
         // URLs externas como mlstatic funcionan directamente
@@ -43,14 +43,14 @@ export async function generateMetadata({ params }: ProductoVariosPageProps): Pro
       }
     } else if (productImage.startsWith('/')) {
       // URL relativa que empieza con /
-      imageUrl = `https://www.mundocuota.com.ar${productImage}?v=${Date.now()}`
+      imageUrl = `https://surimportacion-catalogo.vercel.app${productImage}?v=${Date.now()}`
     } else {
       // URL relativa sin /
-      imageUrl = `https://www.mundocuota.com.ar/${productImage}?v=${Date.now()}`
+      imageUrl = `https://surimportacion-catalogo.vercel.app/${productImage}?v=${Date.now()}`
     }
 
     const title = `${product.descripcion} | SUR IMPORTACIÓN`
-    const description = product.descripcion_detallada 
+    const description = product.descripcion_detallada
       ? product.descripcion_detallada.substring(0, 160) + '...'
       : `Descubre ${product.descripcion} con los mejores planes de financiación. Producto de calidad.`
 
@@ -61,7 +61,7 @@ export async function generateMetadata({ params }: ProductoVariosPageProps): Pro
       openGraph: {
         type: 'website',
         locale: 'es_AR',
-        url: `https://www.mundocuota.com.ar/varios/${resolvedParams.id}`,
+        url: `https://surimportacion-catalogo.vercel.app/varios/${resolvedParams.id}`,
         siteName: 'SUR IMPORTACIÓN',
         title,
         description,
